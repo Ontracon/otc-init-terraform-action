@@ -1,0 +1,69 @@
+name: 'Terraform Initial Backend Environment Bootstrap'
+description: 'Bash Script which creates required Backend for AWS and Azure'
+
+inputs:
+  configuration_file:
+    description: 'Configuration File'
+    required: true
+    default: ''
+  prerequisites_file:
+    description: 'Optional - if you like to deploy infrastructure in addition'
+    required: false
+    default: ''
+  CLOUD_REGION:
+    description: 'Location to deploy the infrastructure'
+    required: false
+    default: ''
+  AWS_ACCESS_KEY_ID:
+    description: 'AWS_ACCESS_KEY_ID'
+    required: false
+    default: ''
+  AWS_SECRET_ACCESS_KEY:
+    description: 'AWS_SECRET_ACCESS_KEY'
+    required: false
+    default: ''
+  GITHUB_TOKEN:
+    description: 'GITHUB_TOKEN'
+    required: false
+    default: ''
+  ARM_SUBSCRIPTION_ID:
+    description: 'ARM_SUBSCRIPTION_ID'
+    required: false
+    default: ''
+  ARM_CLIENT_ID:
+    description: 'ARM_CLIENT_ID'
+    required: false
+    default: ''
+  ARM_TENANT_ID:
+    description: 'ARM_TENANT_ID'
+    required: false
+    default: ''
+  ARM_CLIENT_SECRET:
+    description: 'ARM_CLIENT_SECRET'
+    required: false
+    default: ''
+  BACKEND_DESTROY:
+    description: 'Delete backend, use with caution!!!'
+    required: false
+    default: 'false'
+
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Bootstrap Initial Environment
+      run: |
+            echo "config:$ACTION_INPUT_CONFIGURATION_FILE"
+            bash ${{ github.action_path }}/src/bootstrap.sh -c "$ACTION_INPUT_CONFIGURATION_FILE" -p "$ACTION_INPUT_PREREQUISITES_FILE" -r "$ACTION_INPUT_LOCATION"
+      shell: bash
+      env:
+        ACTION_INPUT_CONFIGURATION_FILE: ${{ inputs.configuration_file}}
+        ACTION_INPUT_PREREQUISITES_FILE: ${{ inputs.prerequisites_file}}
+        ACTION_INPUT_LOCATION: ${{ inputs.CLOUD_REGION}}
+        AWS_ACCESS_KEY_ID: ${{ inputs.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        ARM_CLIENT_ID: ${{ inputs.ARM_CLIENT_ID }}
+        ARM_TENANT_ID: ${{ inputs.ARM_TENANT_ID }}
+        ARM_CLIENT_SECRET: ${{ inputs.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ inputs.ARM_SUBSCRIPTION_ID }}

@@ -1,0 +1,5 @@
+region         = "eu-central-1"
+bucket         = "otc-tst-eu-central-1-init-tfstates"
+dynamodb_table = "otc-tst-eu-central-1-init-tfstates"
+key            = "empty"
+encrypt        = true

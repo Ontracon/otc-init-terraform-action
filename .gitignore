@@ -1,0 +1,37 @@
+
+# Ignnore local files
+**/*.local
+**/*.local/
+
+# Local .terraform directories
+**/.terraform/*
+
+# Local test results
+**/.results/*
+
+# Terraform lockfile
+.terraform.lock.hcl
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# tmp files
+*.tmp
+
+# inspec files
+inspec.lock
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc

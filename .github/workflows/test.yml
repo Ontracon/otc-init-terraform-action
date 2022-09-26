@@ -1,0 +1,50 @@
+name: Test - Terraform test action
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+    paths:
+
+      - 'src/*'
+      - 'action.yml'
+      - '.github/workflows/test.yml'
+
+#Ensures that only one terraform task run at a time.
+concurrency:
+  group: terraform
+
+jobs:
+  test:
+    name: Test - terraform test action
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - uses: actions/checkout@v3
+      - id: aws_test
+        name: Test - AWS Backend
+        uses: ./
+        with:
+          configuration_file: '${{ github.workspace }}/tests/eu-central-1.tfbackend' 
+          AWS_ACCESS_KEY_ID: ${{ secrets.OTC_TEST_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.OTC_TEST_AWS_SECRET_ACCESS_KEY }}
+          BACKEND_DESTROY: 'true'
+
+      - id: azure_test
+        name: Test - Azure Backend
+        uses: ./
+        with:
+          configuration_file: '${{ github.workspace }}/tests/westeurope.tfbackend' 
+          CLOUD_REGION: 'westeurope'
+          ARM_CLIENT_ID: ${{ secrets.OTC_TEST_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.OTC_TEST_ARM_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.OTC_TEST_ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.OTC_TEST_ARM_SUBSCRIPTION_ID }}      
+
+  
+          
